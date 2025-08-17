@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>
+   RateBoostHQ
+  </title>
+<style>
+   body { font-family: sans-serif; max-width: 600px; margin: auto; padding: 1rem; background: #f9f9f9; }
+    h2 { text-align: center; }
+    label { margin-top: 1rem; display: block; font-weight: bold; }
+    input { width: 100%; padding: 0.5rem; margin-top: 0.25rem; }
+    button, select { margin-top: 1rem; padding: 0.6rem; width: 100%; font-size: 1rem; }
+    .result { background: white; margin-top: 2rem; padding: 1rem; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+    .hidden { display: none; }
+    .stars { font-size: 1.1rem; color: #f4c542; margin-left: 0.5rem; }
+    .gray { color: lightgray; }
+    footer { margin-top: 2rem; text-align: center; font-size: 0.9rem; color: #888; }
+  
+    
+      100% { transform: scale(1.2); opacity: 1; }
+    }
+   .container {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        margin-top: 2rem;
+    }
+    label {
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+        display: block;
+        color: #333;
+    }
+    input[type="number"], select {
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 1rem;
+        box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+        padding: 0.5rem;
+    }
+    button {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+    button:hover {
+        background-color: #2980b9;
+    }
+   input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+<h2>
+<span style="font-size: 0.8rem; vertical-align: top; margin-right: 0.25rem;">
+     ©
+    </span>
+    RateBoostHQ
+   </h2>
+<p style="text-align: center; font-size: 1rem; color: #666; margin-top: 0.25rem; font-weight: 400;">
+    Boost Your Business with Precision
+   </p>
+<div class="bonus hidden" id="advancedBonus" style="margin-top: 2rem; padding: 1.75rem 2rem; background: #f0f8ff; border-left: 5px solid #3498db; border-radius: 12px; text-align: left; font-size: 1rem; color: #2c3e50; box-shadow: 0 2px 10px rgba(0,0,0,0.04);">
+<div style="font-size: 1.2rem; font-weight: 600; margin-bottom: 0.75rem;">
+     📊 Unsure about your Google star breakdown?
+    </div>
+<div style="line-height: 1.7; font-size: 1rem;">
+     We're here to help! Send your
+     <strong>
+      Business Name
+     </strong>
+     and
+     <strong>
+      Postcode
+     </strong>
+     to:
+     <br/>
+<a href="mailto:support@rateboosthq.com" style="color: #2c3e50; font-weight: bold; text-transform: lowercase;">
+      support@rateboosthq.com
+     </a><br/>For guidance on how to find it yourself —
+     <strong>
+      Quick and Hassle-Free.
+     </strong>
+</div>
+</div>
+<label for="mode">
+    Select Mode
+   </label>
+<select id="mode" onchange="switchMode()">
+<option value="quick">
+     Quick Mode
+    </option>
+<option value="advanced">
+     Advanced Mode
+    </option>
+</select>
+<div id="quickMode">
+<label>
+     Total Reviews
+    </label>
+<input id="q_total" min="0" onkeydown="return event.keyCode !== 38 &amp;&amp; event.keyCode !== 40" placeholder="e.g. 1162" type="number"/>
+<label>
+     Displayed Rating
+    </label>
+<input id="q_displayed" min="0" onkeydown="return event.keyCode !== 38 &amp;&amp; event.keyCode !== 40" placeholder="e.g. 4.7" step="0.1" type="number"/>
+<label>
+     Target Rating
+    </label>
+<input id="q_target" min="0" onkeydown="return event.keyCode !== 38 &amp;&amp; event.keyCode !== 40" placeholder="e.g. 4.8" step="0.1" type="number"/>
+<button onclick="calculateQuick()">
+     Calculate
+    </button>
+<div class="result hidden" id="q_result">
+</div>
+<div id="tipBox" style="margin-top: 1.5rem; font-size: 0.95rem; color: #444; background: #f0f0f0; padding: 0.75rem; border-radius: 6px; text-align: center;">
+     Tip will appear here...
+    </div>
+</div>
+<div class="hidden" id="licenseGate" style="margin-top:1rem;padding:1rem;border:1px solid #eee;background:#fff;border-radius:10px;">
+<h3 style="margin:0 0 .5rem 0;">🔒 Advanced Mode locked</h3>
+<p style="margin:.25rem 0 .5rem 0;">Enter your Lemon Squeezy license key to unlock. Don’t have one?
+        <a href="https://rateboosthq.lemonsqueezy.com/buy/e5a17d6c-e8b4-4447-8c59-3969e8532d53" rel="noreferrer noopener" target="_blank">Buy Now</a>
+</p>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+<input id="licenseKeyInput" placeholder="Paste your license key" style="flex:1;min-width:220px;padding:.6rem;border:1px solid #ccc;border-radius:6px;"/>
+<button id="licenseBtn" style="padding:.6rem 1rem;background:#3498db;color:#fff;border:0;border-radius:6px;cursor:pointer;" type="button">Unlock</button>
+</div>
+<div id="licenseMsg" style="margin-top:.5rem;min-height:22px;"></div>
+</div><div class="hidden" id="advancedMode">
+<label>
+     5-Star Reviews
+     <span class="stars">
+      ★★★★★
+     </span>
+</label>
+<input id="a_5" min="0" onkeydown="return event.keyCode !== 38 &amp;&amp; event.keyCode !== 40" placeholder="e.g. 1032" type="number"/>
+<label>
+     4-Star Reviews
+     <span class="stars">
+      ★★★★
+      <span class="gray">
+       ☆
+      </span>
+</span>
+</label>
+<input id="a_4" min="0" onkeydown="return event.keyCode !== 38 &amp;&amp; event.keyCode !== 40" placeholder="e.g. 68" type="number"/>
+<label>
+     3-Star Reviews
+     <span class="stars">
+      ★★★
+      <span class="gray">
+       ☆☆
+      </span>
+</span>
+</label>
+<input id="a_3" min="0" onkeydown="return event.keyCode !== 38 &amp;&amp; event.keyCode !== 40" placeholder="e.g. 35" type="number"/>
+<label>
+     2-Star Reviews
+     <span class="stars">
+      ★★
+      <span class="gray">
+       ☆☆☆
+      </span>
+</span>
+</label>
+<input id="a_2" min="0" onkeydown="return event.keyCode !== 38 &amp;&amp; event.keyCode !== 40" placeholder="e.g. 18" type="number"/>
+<label>
+     1-Star Reviews
+     <span class="stars">
+      ★
+      <span class="gray">
+       ☆☆☆☆
+      </span>
+</span>
+</label>
+<input id="a_1" min="0" onkeydown="return event.keyCode !== 38 &amp;&amp; event.keyCode !== 40" placeholder="e.g. 9" type="number"/>
+<label>
+     Target Rating
+    </label>
+<input id="a_target" min="0" onkeydown="return event.keyCode !== 38 &amp;&amp; event.keyCode !== 40" placeholder="e.g. 4.8" step="0.1" type="number"/>
+<button onclick="calculateAdvanced()">
+     Calculate
+    </button>
+<div class="result hidden" id="a_result">
+</div>
+<div id="tipBox" style="margin-top: 1.5rem; font-size: 0.95rem; color: #444; background: #f0f0f0; padding: 0.75rem; border-radius: 6px; text-align: center;">
+     Tip will appear here...
+    </div>
+</div>
+<footer>
+    © 2025 RateBoostHQ. All rights reserved.
+   </footer>
+</div>
+<script>
+   function switchMode() {
+      const mode = document.getElementById("mode").value;
+      document.getElementById("quickMode").classList.toggle("hidden", mode !== "quick");
+      document.getElementById("advancedMode").classList.toggle("hidden", mode !== "advanced");
+    }
+
+    function calculateQuick() {
+      const total = parseInt(document.getElementById("q_total").value);
+      const shown = parseFloat(document.getElementById("q_displayed").value);
+      const target = parseFloat(document.getElementById("q_target").value);
+      const resultBox = document.getElementById("q_result");
+
+      if (isNaN(total) || isNaN(shown) || isNaN(target) || total <= 0 || target <= shown) {
+        resultBox.innerHTML = "⚠️ Please enter valid numbers.";
+        resultBox.classList.remove("hidden");
+      updateTip();
+        return;
+      }
+
+      const minAvg = shown - 0.05;
+      const maxAvg = shown + 0.049;
+      const targetAvg = target - 0.05;
+      const starsLow = total * minAvg;
+      const starsHigh = total * maxAvg;
+
+      let minNeeded = null, maxNeeded = null;
+      for (let n = 1; n <= 1000; n++) {
+        const lowAvg = (starsLow + 5 * n) / (total + n);
+        const highAvg = (starsHigh + 5 * n) / (total + n);
+        if (minNeeded === null && highAvg >= targetAvg) minNeeded = n;
+        if (lowAvg >= targetAvg) { maxNeeded = n; break; }
+      }
+
+      if (minNeeded && maxNeeded) {
+        resultBox.innerHTML = `Estimated average: ${minAvg.toFixed(3)}–${maxAvg.toFixed(3)}<br>
+        To reach ${target.toFixed(1)}: <strong>${minNeeded}–${maxNeeded}</strong> more 5-star reviews.`;
+      } else {
+        resultBox.innerHTML = "❌ Could not calculate.";
+      }
+      resultBox.classList.remove("hidden");
+      updateTip();
+    }
+
+    function calculateAdvanced() {
+      const one = parseInt(document.getElementById("a_1").value) || 0;
+      const two = parseInt(document.getElementById("a_2").value) || 0;
+      const three = parseInt(document.getElementById("a_3").value) || 0;
+      const four = parseInt(document.getElementById("a_4").value) || 0;
+      const five = parseInt(document.getElementById("a_5").value) || 0;
+      const target = parseFloat(document.getElementById("a_target").value);
+      const resultBox = document.getElementById("a_result");
+
+      const total = one + two + three + four + five;
+      const totalStars = one*1 + two*2 + three*3 + four*4 + five*5;
+      const avg = totalStars / total;
+      const rounded = Math.round(avg * 10) / 10;
+      const targetAvg = target - 0.05;
+
+      let needed = null;
+
+      const tips = [
+        "💬 Tip: Replying to reviews builds trust and encourages more positive feedback.",
+        "💡 Tip: 5-star reviews give the biggest boost, but even 4-star reviews can help if your rating is low.",
+        "📊 Tip: Regularly monitoring your review score helps you plan better.",
+        "🤝 Tip: Thanking reviewers — even for 3- or 4-star reviews — shows professionalism.",
+        "⭐ Tip: Encourage satisfied customers to leave reviews shortly after service.",
+        "🗣️ Tip: Always ask if anything was unsatisfactory before the customer leaves — it shows you care and gives you a chance to fix it.",
+        "👥 Tip: Reassure unhappy customers that their concerns will be passed to the manager or owner — this can prevent them from posting negative reviews online.",
+        "🌟 Tip: Only ask clearly satisfied customers to leave reviews — they’re the most likely to leave 5 stars."
+      ];
+      const randomTip = tips[Math.floor(Math.random() * tips.length)];
+
+      for (let n = 1; n <= 1000; n++) {
+        const newAvg = (totalStars + 5 * n) / (total + n);
+        if (newAvg >= targetAvg) {
+          needed = n;
+          break;
+        }
+      }
+
+      function starRow(stars, count) {
+        const full = '<span style="color:#f4c542;">★</span>'.repeat(stars);
+        const empty = '<span style="color:lightgray;">★</span>'.repeat(5 - stars);
+        return `${full}${empty}: ${count}`;
+      }
+
+      if (needed !== null) {
+        resultBox.innerHTML = `
+          Total reviews: <strong>${total}</strong><br>
+          Real average: <strong>${avg.toFixed(3)}</strong><br>
+          Rounded rating: <strong>${rounded.toFixed(1)}</strong><br>
+          To reach ${target.toFixed(1)}, you need <strong>${needed}</strong> more 5-star reviews.<br><br>
+          <span style="color:gold;">★</span> <u>Breakdown:</u><br>
+          ${starRow(5, five)}<br>
+          ${starRow(4, four)}<br>
+          ${starRow(3, three)}<br>
+          ${starRow(2, two)}<br>
+          ${starRow(1, one)}<br><br>
+          ${randomTip}
+        `;
+      } else {
+        resultBox.innerHTML = "❌ Cannot reach target within 1000 reviews.";
+      }
+
+      resultBox.classList.remove("hidden");
+      updateTip();
+    }
+  
+
+document.getElementById("mode").addEventListener("change", function () {
+  const bonus = document.getElementById("advancedBonus");
+  bonus.classList.toggle("hidden", this.value !== "advanced");
+});
+
+    const tips = [
+        "💬 Tip: Replying to reviews builds trust and encourages more positive feedback.",
+        "💡 Tip: 5-star reviews give the biggest boost, but even 4-star reviews can help if your rating is low.",
+        "📊 Tip: Regularly monitoring your review score helps you plan better.",
+        "🤝 Tip: Thanking reviewers — even for 3- or 4-star reviews — shows professionalism.",
+        "⭐ Tip: Encourage satisfied customers to leave reviews shortly after service.",
+        "🗣️ Tip: Always ask if anything was unsatisfactory before the customer leaves — it shows you care and gives you a chance to fix it.",
+        "👥 Tip: Reassure unhappy customers that their concerns will be passed to the manager or owner — this can prevent them from posting negative reviews online.",
+        "🌟 Tip: Only ask clearly satisfied customers to leave reviews — they’re the most likely to leave 5 stars."
+    ];
+
+    function updateTip() {
+        const randomTip = tips[Math.floor(Math.random() * tips.length)];
+        document.querySelectorAll('#tipBox').forEach(box => {
+            box.textContent = randomTip;
+        });
+    }
+
+    window.addEventListener("DOMContentLoaded", updateTip);
+
+    document.getElementById("mode").addEventListener("change", function () {
+        const bonus = document.getElementById("advancedBonus");
+        bonus.classList.toggle("hidden", this.value !== "advanced");
+        updateTip();
+    });
+   // Override calculateAdvanced to improve input validation
+    function calculateAdvanced() {
+      const one = parseInt(document.getElementById("a_1").value) || 0;
+      const two = parseInt(document.getElementById("a_2").value) || 0;
+      const three = parseInt(document.getElementById("a_3").value) || 0;
+      const four = parseInt(document.getElementById("a_4").value) || 0;
+      const five = parseInt(document.getElementById("a_5").value) || 0;
+      const target = parseFloat(document.getElementById("a_target").value);
+      const resultBox = document.getElementById("a_result");
+
+      const total = one + two + three + four + five;
+      if (total === 0 || isNaN(target) || target < 1 || target > 5) {
+        resultBox.innerHTML = "⚠️ Please enter valid numbers above.";
+        resultBox.classList.remove("hidden");
+        updateTip();
+        return;
+      }
+
+      const totalStars = one*1 + two*2 + three*3 + four*4 + five*5;
+      const avg = totalStars / total;
+      const rounded = Math.round(avg * 10) / 10;
+      const targetAvg = target - 0.05;
+
+      let needed = null;
+
+      for (let n = 1; n <= 1000; n++) {
+        const newAvg = (totalStars + 5 * n) / (total + n);
+        if (newAvg >= targetAvg) {
+          needed = n;
+          break;
+        }
+      }
+
+      function starRow(stars, count) {
+        const full = '<span style="color:#f4c542;">★</span>'.repeat(stars);
+        const empty = '<span style="color:lightgray;">★</span>'.repeat(5 - stars);
+        return `${full}${empty}: ${count}`;
+      }
+
+      if (needed !== null) {
+        resultBox.innerHTML = `
+          Total reviews: <strong>${total}</strong><br>
+          Real average: <strong>${avg.toFixed(3)}</strong><br>
+          Rounded rating: <strong>${rounded.toFixed(1)}</strong><br>
+          To reach ${target.toFixed(1)}, you need <strong>${needed}</strong> more 5-star reviews.<br><br>
+          <span style="color:gold;">★</span> <u>Breakdown:</u><br>
+          ${starRow(5, five)}<br>
+          ${starRow(4, four)}<br>
+          ${starRow(3, three)}<br>
+          ${starRow(2, two)}<br>
+          ${starRow(1, one)}<br><br>
+          ${tips[Math.floor(Math.random() * tips.length)]}
+        `;
+      } else {
+        resultBox.innerHTML = "❌ Cannot reach target within 1000 reviews.";
+      }
+
+      resultBox.classList.remove("hidden");
+      updateTip();
+    }
+  </script>
+<script>
+// ===== Lemon Squeezy license check via Netlify function =====
+const LS_ENDPOINT = "/api/validate-license"; // Netlify function route
+
+async function lsCheck(key) {
+  try {
+    const r = await fetch(LS_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ license_key: key })
+    });
+    const d = await r.json();
+    return !!d.valid;
+  } catch (e) { return false; }
+}
+
+async function hasValidStoredLicense() {
+  const key = localStorage.getItem("rateboost_license") || "";
+  if (!key) return false;
+  return await lsCheck(key);
+}
+
+async function showAdvancedOrGate() {
+  const ok = await hasValidStoredLicense();
+  const gate = document.getElementById("licenseGate");
+  const adv = document.getElementById("advancedMode");
+  if (!gate || !adv) return;
+  if (ok) {
+    gate.classList.add("hidden");
+    adv.classList.remove("hidden");
+  } else {
+    gate.classList.remove("hidden");
+    adv.classList.add("hidden");
+  }
+}
+
+// Wire unlock button
+(function(){
+  const btn = document.getElementById("licenseBtn");
+  if (btn) {
+    btn.addEventListener("click", async function(){
+      const input = document.getElementById("licenseKeyInput");
+      const msg = document.getElementById("licenseMsg");
+      const key = (input && input.value || "").trim();
+      if (!key) { if (msg) msg.textContent = "Please enter a license key."; return; }
+      if (msg) msg.textContent = "Checking…";
+      const ok = await lsCheck(key);
+      if (ok) {
+        localStorage.setItem("rateboost_license", key);
+        if (msg) { msg.style.color = "#0f8a3b"; msg.textContent = "✅ License verified. Advanced Mode unlocked."; }
+        await showAdvancedOrGate();
+      } else {
+        if (msg) { msg.style.color = "#b00020"; msg.textContent = "❌ Invalid, inactive, or over activation limit."; }
+      }
+    });
+  }
+})();
+
+// Patch switchMode() to enforce gate when selecting Advanced
+(function(){
+  const _origSwitch = window.switchMode;
+  window.switchMode = function(){
+    const mode = document.getElementById("mode").value;
+    if (typeof _origSwitch === "function") _origSwitch();
+    if (mode === "advanced") { showAdvancedOrGate(); }
+  };
+})();
+
+// Also check on load in case page starts in Advanced
+window.addEventListener("DOMContentLoaded", function(){ 
+  try { 
+    const modeSel = document.getElementById("mode");
+    if (modeSel && modeSel.value === "advanced") { showAdvancedOrGate(); }
+  } catch(e){}
+});
+</script></body>
+</html>
