@@ -408,7 +408,7 @@ document.getElementById("mode").addEventListener("change", function () {
   </script>
 <script>
 // ===== Lemon Squeezy license check via Netlify function =====
-const LS_ENDPOINT = "/api/validate-license"; // Netlify function route
+const LS_ENDPOINT = "/.netlify/functions/check-license"; // Netlify function route
 
 async function lsCheck(key) {
   try {
